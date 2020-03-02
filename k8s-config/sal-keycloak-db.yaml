@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-db
+  namespace: sal-keycloak
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: keycloak-db
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: keycloak-db
+  namespace: sal-keycloak
+spec:
+  selector:
+    matchLabels:
+      app: keycloak-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: keycloak-db
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - image: sal-container-registry.k8s-dev.iamdg.net.ma/keycloak-db:latest
+        resources:
+          limits:
+            memory: "2Gi"
+          requests:
+            memory: "2Gi"
+        name: keycloak-db
+        imagePullPolicy: Always
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: keycloak
+        - name: MYSQL_USER
+          value: keycloak
+        - name: MYSQL_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: sal-keycloak-mysql-pv-claim

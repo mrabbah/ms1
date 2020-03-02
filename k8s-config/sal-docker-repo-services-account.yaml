@@ -1,0 +1,1 @@
+kubectl create secret docker-registry regcred --docker-server=sal-container-registry.k8s-dev.iamdg.net.ma --docker-username=********** --docker-password=***********
