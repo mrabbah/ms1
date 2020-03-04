@@ -56,7 +56,7 @@ class Ms1ResourceIT {
         consumerProps.put("client.id", "default-client");
         kafkaProperties.setConsumer(consumerProps);
 
-        Ms1ResourceIT kafkaResource = new Ms1ResourceIT(kafkaProperties);
+        Ms1KafkaResource kafkaResource = new Ms1KafkaResource(kafkaProperties);
 
         restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
     }

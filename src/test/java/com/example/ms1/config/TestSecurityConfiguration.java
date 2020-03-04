@@ -23,16 +23,6 @@ import static org.mockito.Mockito.mock;
  */
 @TestConfiguration
 public class TestSecurityConfiguration {
-    private final ClientRegistration clientRegistration;
-
-    public TestSecurityConfiguration() {
-        
-    }
-
-    @Bean
-    ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(clientRegistration);
-    }
 
     @Bean
     JwtDecoder jwtDecoder() {
